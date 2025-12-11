@@ -1,0 +1,135 @@
+.custom-pills .nav-link.active,
+.custom-pills .nav-link.show {
+  background-color: #EBECED !important;
+  color: black !important;
+  border-color: #EBECED !important;
+}
+
+.custom-pills .nav-link:focus,
+.custom-pills .nav-link {
+  color: black;
+}
+
+.custom-pills .nav-link:hover {
+  background-color: #EBECED;
+  color: black;
+}
+
+.custom-pills .nav-link {
+  position: relative;
+  padding-right: 20px;
+  color: black;
+}
+
+.custom-pills .nav-link::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 0.3s ease;
+}
+
+.custom-pills .nav-link.active::after,
+.custom-pills .nav-link.show::after {
+  transform: translateY(-50%) rotate(-135deg);
+}
+
+.custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 10px;
+  height: 100px;
+  gap: 200px;
+  background-color: #ffffff;
+}
+
+.logo-img {
+  height: 250px;
+  width: auto;
+}
+
+.custom-dropdown>.dropdown-toggle:focus,
+.custom-dropdown>.dropdown-toggle {
+  background-color: #F6F6F6 !important;
+  color: black !important;
+  border: hsl(0, 0%, 96%) !important;
+  width: 225px !important;
+}
+
+.custom-dropdown>.dropdown-toggle:hover,
+.custom-dropdown>.dropdown-toggle:active {
+  color: black !important;
+  background-color: #B7BABC !important;
+  border: #B7BABC !important;
+  width: 225px !important;
+}
+
+.custom-dropdown .dropdown-menu .dropdown-item {
+  font-size: 14px;
+  color: black;
+  width: 225px !important;
+}
+
+.custom-dropdown .dropdown-menu .dropdown-item:hover {
+  background-color: #B7BABC;
+  color: black;
+  width: 225px !important;
+}
+
+.custom-dropdown {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ✅ Custom tooltip */
+.tooltip-tab {
+  position: relative;
+  cursor: pointer;
+}
+
+.tooltip-tab::after {
+  content: attr(data-tip);
+  /* Χρησιμοποιούμε data-tip αντί για data-tooltip */
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.tooltip-tab:hover::after {
+  opacity: 1;
+}
+
+/* Κλειδωμένα tabs: γκρι γράμματα, κανένα hover/click */
+.custom-pills .nav-link.tab-disabled {
+  color: #6b7280 !important;
+  opacity: 0.8 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  /* σταματά hover/click */
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+/* Αν θες να μη φαίνεται το βελάκι στα κλειδωμένα */
+.custom-pills .nav-link.tab-disabled::after {
+  content: none !important;
+}

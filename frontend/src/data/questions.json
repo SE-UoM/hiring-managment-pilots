@@ -1,0 +1,56 @@
+[
+    {
+        "name": "Introduction",
+        "questions": [
+            {
+                "question": "Tell us about yourself.",
+                "skills": [
+                    "Eye contact",
+                    "Confidence"
+                ]
+            },
+            {
+                "question": "What motivated you to apply here?",
+                "skills": [
+                    "Company research",
+                    "Personal mission fit",
+                    "Values alignment"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Technical Assessment",
+        "questions": [
+            {
+                "question": "Explain a challenging technical problem you solved.",
+                "skills": [
+                    "Root cause analysis",
+                    "Impact measurement",
+                    "Trade-off evaluation",
+                    "Structured explanation"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Behavioral & Cultural Fit",
+        "questions": [
+            {
+                "question": "Describe a time you adapted quickly to change.",
+                "skills": [
+                    "Resilience",
+                    "Flexibility"
+                ]
+            },
+            {
+                "question": "How do you handle tight deadlines?",
+                "skills": [
+                    "Time management",
+                    "Prioritization",
+                    "Stress management"
+                ]
+            }
+        ]
+    }
+]

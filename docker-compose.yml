@@ -1,0 +1,64 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: hiring-manager-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      # auto-import backup ONLY if database is empty
+      - ./db/db_backup.sql:/docker-entrypoint-initdb.d/db_backup.sql
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - hiring-management-network
+
+  backend:
+    build: ./backend
+    container_name: skillab-hiring-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "8087:8080"
+    networks:
+      - hiring-management-network
+    env_file:
+      - .env
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: skillab-hiring-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      # React must receive REACT_APP_* values at build/runtime
+      REACT_APP_BASE_URL: ${REACT_APP_BASE_URL}
+    ports:
+      - "8088:3000"
+    networks:
+      - hiring-management-network
+
+networks:
+  hiring-management-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
