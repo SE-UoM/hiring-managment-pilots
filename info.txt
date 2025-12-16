@@ -1,0 +1,25 @@
+###for complete platform build and deploy
+docker compose --env-file .env up --build -d
+
+###droping the components
+docker compose down
+###droping and removing volume data
+docker compose down -v
+
+###windows and linux
+#GET database backup
+docker exec -t hiring-manager-db pg_dump -U postgres -d hiringmanager_db --clean --if-exists --no-owner > db_backup.sql
+#RESTORE database backup
+cat db_backup.sql | docker exec -i hiring-manager-db psql -U postgres hiringmanager_db
+
+###Linux
+#GET CV volume data backup
+docker run --rm     -v hirring-managment-pilots_cvs-data:/volume_data     -v $(pwd):/backup     alpine     tar czf /backup/data_backup.tar.gz -C /volume_data .
+#RESTORE volume from backup
+docker run --rm     -v hirring-managment-pilots_cvs-data:/volume_data     -v $(pwd):/backup     alpine     tar xzf /backup/data_backup.tar.gz -C /volume_data
+
+###Windows
+#GET CV volume data backup
+docker run --rm -v hirring-managment-pilots_cvs-data:/volume_data -v ${PWD}:/backup alpine tar czf /backup/cvs-data_backup.tar.gz -C /volume_data .
+#RESTORE volume from backup
+docker run --rm -v hirring-managment-pilots_cvs-data:/volume_data -v ${PWD}:/backup alpine tar xzf /backup/cvs-data_backup.tar.gz -C /volume_data

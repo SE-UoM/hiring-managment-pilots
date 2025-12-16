@@ -36,6 +36,8 @@ public class CandidateController {
     private final CandidateService candidateService;
     private final SkillScoreService skillScoreService;
     private final JobAdRepository jobAdRepository;
+        private static final String UPLOAD_DIR = "/data/file-storage/cvs";
+
 
     public CandidateController(CandidateService candidateService,
                                SkillScoreService skillScoreService,
@@ -213,8 +215,11 @@ public class CandidateController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only PDF allowed");
             }
 
-            Path base = Paths.get("uploads", "cv").normalize();
-            Files.createDirectories(base);
+            // Path base = Paths.get("uploads", "cv").normalize();
+            // Files.createDirectories(base);
+            Path base = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(base)) Files.createDirectories(base);
+
 
             String ts = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS").format(LocalDateTime.now());
             String original = file.getOriginalFilename();
@@ -228,10 +233,15 @@ public class CandidateController {
 
             String rel = base.resolve(out.getFileName()).toString().replace('\\', '/');
 
+            // return Map.of(
+            //         "path", rel,
+            //         "originalName", (original != null && !original.isBlank()) ? original : "cv.pdf"
+            // );
             return Map.of(
-                    "path", rel,
+                    "path", out.toString(), 
                     "originalName", (original != null && !original.isBlank()) ? original : "cv.pdf"
             );
+
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
@@ -259,13 +269,24 @@ public class CandidateController {
             if (path.startsWith("classpath:")) {
                 return new ClassPathResource(path.substring("classpath:".length()));
             }
-            Path base = Paths.get("uploads", "cv").normalize();
+            // Path base = Paths.get("uploads", "cv").normalize();
+            // Path p = Paths.get(path).normalize();
+            Path base = Paths.get(UPLOAD_DIR).normalize();
             Path p = Paths.get(path).normalize();
-            if (p.isAbsolute()) return null;
-            if (!p.startsWith("uploads")) {
-                p = base.resolve(p).normalize();
+
+            // if (p.isAbsolute()) return null;
+            // if (!p.startsWith("uploads")) {
+            //     p = base.resolve(p).normalize();
+            // }
+            // if (!p.startsWith(base)) return null;
+            // if (Files.exists(p) && Files.isReadable(p)) {
+            //     return new FileSystemResource(p);
+            // }
+            if (!p.startsWith(base)) {
+                // If the DB only has the filename, resolve it against base
+                p = base.resolve(p.getFileName()).normalize();
             }
-            if (!p.startsWith(base)) return null;
+            
             if (Files.exists(p) && Files.isReadable(p)) {
                 return new FileSystemResource(p);
             }
